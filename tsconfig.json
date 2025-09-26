@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    // File paths
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    },
+    // Module system
+    "module": "NodeNext", // Enables ESM with Node resolution
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    // Node types
+    "lib": [
+      "ESNext"
+    ],
+    "types": [
+      "node"
+    ],
+    // Output
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    // Type safety
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    // Style (optional but recommended)
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // Misc
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
