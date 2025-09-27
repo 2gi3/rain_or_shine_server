@@ -1,9 +1,9 @@
-import express from 'express'
+import app from "@/app.js";
+import { hello } from "./hello.js";
 
-const app = express()
+const PORT = 3000;
 
-app.get('/', (req, res) => {
-    res.send('Fudge!')
-})
-
-app.listen(3000, () => { console.log('The app is working') })
+app.listen(PORT, () => {
+    hello();
+    console.log(`🚀 Hello,  Server running on: http://localhost:${PORT}`);
+});

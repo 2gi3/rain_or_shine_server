@@ -13,6 +13,8 @@
     "module": "NodeNext", // Enables ESM with Node resolution
     "moduleResolution": "NodeNext",
     "target": "ESNext",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     // Node types
     "lib": [
       "ESNext"
