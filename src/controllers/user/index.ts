@@ -5,6 +5,7 @@ import type { Request, Response } from 'express';
 const prisma = new PrismaClient();
 
 export const createUser = async (req: Request, res: Response) => {
+    console.log('sopra la panca la capra campa');
     try {
         const { email, name } = req.body;
 

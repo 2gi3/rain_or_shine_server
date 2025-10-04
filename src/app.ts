@@ -1,7 +1,12 @@
 import express from "express";
 import userRoutes from './routes/user/index.js'
+import cors from "cors";
+
 
 const app = express();
+app.use(cors({
+    origin: "http://localhost:8081"
+}));
 
 // Middleware
 app.use(express.json());
