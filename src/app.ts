@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import userRoutes from './routes/user/index.js'
 import cors from "cors";
 
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use('/users', userRoutes);
 
 // Routes
-app.get("/", (_req, res) => {
+app.get("/", (_req: Request, res: Response) => {
     res.send("Fudge!");
 });
 
