@@ -1,0 +1,1 @@
+-  run ```bash npm setup:curl ``` to make all the files in `/curl_testing` executable.
