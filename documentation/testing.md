@@ -1,1 +1,2 @@
 -  run ```bash npm setup:curl ``` to make all the files in `/curl_testing` executable.
+- When creating a new file for curl requests, run ``` chmod +x <FILE NAME>.sh ```

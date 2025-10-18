@@ -14,6 +14,7 @@ const corsOptions: CorsOptions = {
         } else {
             callback(new Error("Origin URL not included in allowedOrigins environment variable"));
         }
-    }
+    },
+    credentials: true
 };
 export default corsOptions;

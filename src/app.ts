@@ -1,15 +1,18 @@
 import express, { type Request, type Response } from "express";
 import userRoutes from './routes/user/index.js'
 import authRoutes from './routes/auth/index.js'
+import cookieParser from "cookie-parser";
+
 import cors from "cors";
 import corsOptions from "./middleware/CORS/options.js";
 
 
 const app = express();
+app.use(cookieParser());
 app.use(cors(corsOptions));
-
-
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use('/users', userRoutes);
 app.use("/auth", authRoutes);
 
