@@ -15,6 +15,8 @@ const corsOptions: CorsOptions = {
             callback(new Error("Origin URL not included in allowedOrigins environment variable"));
         }
     },
-    credentials: true
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'x-csrf-token'],
+    exposedHeaders: ['x-csrf-token'],
 };
 export default corsOptions;

@@ -18,12 +18,12 @@ router.use(
         providers: [
             Resend({
                 apiKey: process.env.AUTH_RESEND_KEY!,
-                from: "noreply@peppe.uk",
+                from: "dev@peppe.uk",
             }),
         ],
         adapter: PrismaAdapter(prisma),
         secret: authSecret,
-        trustHost: true
+        trustHost: true,
 
     })
 );
@@ -37,20 +37,6 @@ router.get("/csrf", (req, res) => {
 });
 
 
-router.use(
-    "/",
-    ExpressAuth({
-        providers: [
-            Resend({
-                apiKey: process.env.AUTH_RESEND_KEY!,
-                from: "noreply@ypeppe.uk",
-            }),
-        ],
-        adapter: PrismaAdapter(prisma),
-        secret: authSecret,
-        trustHost: true
 
-    })
-);
 
 export default router;
