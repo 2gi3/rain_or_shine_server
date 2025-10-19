@@ -1,0 +1,6 @@
+- AUTH_SECRET
+This is the only strictly required environment variable. It is the secret used to encode the JWT and encrypt things in transit. As mentioned above, we recommend at least a 32 character random string. This can be generated via the CLI with npm exec auth secret or via openssl with openssl rand -base64 33.
+- AUTH_TRUST_HOST
+When deploying your application behind a reverse proxy, you’ll need to set AUTH_TRUST_HOST equal to true. This tells Auth.js to trust the X-Forwarded-Host header from the reverse proxy. Auth.js will automatically infer this to be true if we detect the environment variable indicating that your application is running on one of the supported hosting providers. Currently VERCEL and CF_PAGES (Cloudflare Pages) are supported.
+- AUTH_URL
+This environment variable is mostly unnecessary with v5 as the host is inferred from the request headers. However, if you are using a different base path, you can set this environment variable as well. For example, AUTH_URL=http://localhost:3000/web/auth or AUTH_URL=https://company.com/app1/auth

@@ -32,7 +32,7 @@ export const getAllUsers = async (_req: Request, res: Response) => {
         const users = await prisma.user.findMany();
         return res.status(200).json({
             users,
-            hello: 'Fudge'
+            hello: 'rain'
         }
         );
     } catch (error: any) {
