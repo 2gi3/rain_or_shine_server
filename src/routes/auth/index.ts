@@ -24,6 +24,26 @@ router.use(
         adapter: PrismaAdapter(prisma),
         secret: authSecret,
         trustHost: true,
+        cookies: {
+            csrfToken: {
+                name: "__Host-authjs.csrf-token",
+                options: {
+                    httpOnly: true,
+                    sameSite: "none", // <-- must be one of 'lax' | 'strict' | 'none'
+                    secure: true,
+                    path: "/",
+                },
+            },
+            sessionToken: {
+                name: "__Secure-authjs.session-token",
+                options: {
+                    httpOnly: true,
+                    sameSite: "none",
+                    secure: true,
+                    path: "/",
+                },
+            },
+        },
 
     })
 );
