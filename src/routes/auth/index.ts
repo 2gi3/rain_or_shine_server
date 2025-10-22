@@ -1,52 +1,21 @@
 import express from "express";
 import { ExpressAuth } from "@auth/express";
-import Resend from "@auth/core/providers/resend";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "../../prisma.js";
+import { authConfig } from "../../middleware/auth/config.js";
+import { signup } from "../../controllers/user/signup.js";
 
 const router = express.Router();
+
+router.post("/signup", signup);
 
 const authSecret = process.env.AUTH_SECRET;
 if (!authSecret) {
     throw new Error("AUTH_SECRET environment variable is required");
 }
 
-// DON'T CHANGE THE ORDER OF THE ROUTES, ExpressAuth must be initialised befor the other auth routes
-router.use(
-    "/",
-    ExpressAuth({
-        providers: [
-            Resend({
-                apiKey: process.env.AUTH_RESEND_KEY!,
-                from: "dev@peppe.uk",
-            }),
-        ],
-        adapter: PrismaAdapter(prisma),
-        secret: authSecret,
-        trustHost: true,
-        cookies: {
-            csrfToken: {
-                name: "__Host-authjs.csrf-token",
-                options: {
-                    httpOnly: true,
-                    sameSite: "none", // <-- must be one of 'lax' | 'strict' | 'none'
-                    secure: true,
-                    path: "/",
-                },
-            },
-            sessionToken: {
-                name: "__Secure-authjs.session-token",
-                options: {
-                    httpOnly: true,
-                    sameSite: "none",
-                    secure: true,
-                    path: "/",
-                },
-            },
-        },
 
-    })
-);
+// DON'T CHANGE THE ORDER OF THE ROUTES, ExpressAuth must be initialised befor the other auth routes
+router.use("/", ExpressAuth(authConfig));
+
 
 router.get("/csrf", (req, res) => {
     if (!req.csrfToken) {
