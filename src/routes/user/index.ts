@@ -1,5 +1,4 @@
-import { verifyEmail } from '@/controllers/user/signin.js';
-// import { signup } from '@/controllers/user/signup.js';
+import { verifyEmail } from '../../controllers/user/signin.js';
 import { auth } from '../../middleware/auth/auth.js';
 import express, { Router } from 'express';
 import type { RequestHandler } from 'express';
