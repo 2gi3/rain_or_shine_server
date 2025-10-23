@@ -1,11 +1,11 @@
 import express from "express";
 import { ExpressAuth } from "@auth/express";
 import { authConfig } from "../../middleware/auth/config.js";
-import { signup } from "../../controllers/user/signup.js";
+// import { signup } from "../../controllers/user/signup.js";
 
 const router = express.Router();
 
-router.post("/signup", signup);
+// router.post("/signup", signup);
 
 const authSecret = process.env.AUTH_SECRET;
 if (!authSecret) {
