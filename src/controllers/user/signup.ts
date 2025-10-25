@@ -4,7 +4,10 @@ import { Resend } from "resend";
 import crypto from "crypto";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY!);
-const BASE_URL = process.env.BASE_URL || "https://your-domain.com";
+if (!process.env.AUTH_URL) {
+    throw new Error("BASE_URL environment variable is missing.");
+}
+const BASE_URL = process.env.AUTH_URL;
 
 export async function signup(req: Request, res: Response) {
     const { name, email } = req.body;
