@@ -1,42 +1,24 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from "../../prisma.js";
 import type { Request, Response } from 'express';
 
 
-const prisma = new PrismaClient();
-
-export const createUser = async (req: Request, res: Response) => {
-    console.log('sopra la panca la capra campa');
+export async function getAllUsers(_req: Request, res: Response) {
     try {
-        const { email, name } = req.body;
-
-        if (!email) {
-            return res.status(400).json({ error: 'Email is required' });
-        }
-
-        const user = await prisma.user.create({
-            data: {
-                email,
-                name,
+        const users = await prisma.user.findMany({
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                emailVerified: true,
+                image: true,
+                createdAt: true,
+                updatedAt: true,
             },
         });
 
-        return res.status(201).json(user);
-    } catch (error: any) {
-        console.error(error);
-        return res.status(500).json({ error: 'Something went wrong' });
+        return res.status(200).json(users);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return res.status(500).json({ error: "Failed to fetch users" });
     }
-};
-
-export const getAllUsers = async (_req: Request, res: Response) => {
-    try {
-        const users = await prisma.user.findMany();
-        return res.status(200).json({
-            users,
-            hello: 'rain'
-        }
-        );
-    } catch (error: any) {
-        console.error(error);
-        return res.status(500).json({ error: 'Something went wrong' });
-    }
-};
+}
