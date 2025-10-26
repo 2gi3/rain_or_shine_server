@@ -1,4 +1,4 @@
-import { getAllUsers } from '../../controllers/user/index.js';
+import { deleteUser, getAllUsers } from '../../controllers/user/index.js';
 import { verifyEmail } from '../../controllers/user/signin.js';
 import { auth } from '../../middleware/auth/auth.js';
 import express, { Router } from 'express';
@@ -14,6 +14,7 @@ router.get("/me", auth, (req, res) => {
 
 router.get("/all", getAllUsers);
 router.get("/all_auth", auth, getAllUsers);
+router.delete("/delete/:id", deleteUser);
 
 
 
