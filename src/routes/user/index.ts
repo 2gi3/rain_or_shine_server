@@ -13,6 +13,8 @@ router.get("/me", auth, (req, res) => {
 });
 
 router.get("/all", getAllUsers);
+router.get("/all_auth", auth, getAllUsers);
+
 
 
 export default router;
