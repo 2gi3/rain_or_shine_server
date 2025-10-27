@@ -1,34 +1,25 @@
 import { Router, type Request, type Response } from "express";
 import { prisma } from "../../prisma.js";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
-
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-
 router.get("/", async (req: Request, res: Response) => {
-    console.log("✅ /auth/verify route hit");
-
     const { token, email } = req.query;
-    console.log({ tokenA: token })
-
+    console.log({ tokenABC: token })
     if (!token || !email) return res.status(400).send("Missing token or email");
-
-    const hashedToken = crypto.createHash("sha256").update(token as string).digest("hex");
-    console.log(hashedToken)
-
 
     const record = await prisma.verificationToken.findUnique({
         where: {
             identifier_token: {
                 identifier: email as string,
-                token: hashedToken as string,
+                token: token as string,
             },
         },
     });
-    console.log({ recordS: record })
+    console.log({ recordABC: record })
+
 
     if (!record || record.expires < new Date()) {
         return res.status(400).send("Invalid or expired token.");
@@ -45,7 +36,7 @@ router.get("/", async (req: Request, res: Response) => {
         where: {
             identifier_token: {
                 identifier: email as string,
-                token: hashedToken as string,
+                token: token as string,
             },
         },
     });
