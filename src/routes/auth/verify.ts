@@ -9,11 +9,15 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 
 
 router.get("/", async (req: Request, res: Response) => {
+    console.log("✅ /auth/verify route hit");
+
     const { token, email } = req.query;
+    console.log({ tokenA: token })
 
     if (!token || !email) return res.status(400).send("Missing token or email");
 
     const hashedToken = crypto.createHash("sha256").update(token as string).digest("hex");
+    console.log(hashedToken)
 
 
     const record = await prisma.verificationToken.findUnique({
@@ -24,6 +28,7 @@ router.get("/", async (req: Request, res: Response) => {
             },
         },
     });
+    console.log({ recordS: record })
 
     if (!record || record.expires < new Date()) {
         return res.status(400).send("Invalid or expired token.");
