@@ -8,7 +8,9 @@ const router = express.Router();
 const authSecret = process.env.AUTH_SECRET;
 if (!authSecret) throw new Error("AUTH_SECRET environment variable is required");
 
-// Initialize ExpressAuth first
+router.use("/verify", verifyRoute);
+
+// Initialize ExpressAuth 
 router.use("/", ExpressAuth(authConfig));
 
 // CSRF route
@@ -17,7 +19,5 @@ router.get("/csrf", (req, res) => {
     return res.json({ csrfToken: req.csrfToken() });
 });
 
-// Mount verify route
-router.use("/verify", verifyRoute);
 
 export default router;
