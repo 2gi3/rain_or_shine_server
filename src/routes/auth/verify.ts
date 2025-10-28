@@ -5,14 +5,14 @@ import jwt from "jsonwebtoken";
 const router = Router();
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-
+const client_url = 'https://rainorshinedev.netlify.app/'
 
 router.get("/", async (req: Request, res: Response) => {
     if (!JWT_SECRET) {
         console.error("JWT_SECRET is missing from environment variables");
         return res.status(500).send("Server misconfiguration: missing JWT secret");
     }
-    const { token, email, client_url } = req.query;
+    const { token, email } = req.query;
 
     if (!token || !email) return res.status(400).send("Missing token or email");
     if (Array.isArray(email) || Array.isArray(token)) return res.status(400).send("Invalid query params");
