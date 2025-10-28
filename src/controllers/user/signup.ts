@@ -10,6 +10,10 @@ if (!process.env.BASE_URL) {
 const BASE_URL = process.env.BASE_URL;
 
 export async function signup(req: Request, res: Response) {
+    const protocol = req.protocol;
+    const host = req.get("host");
+    const client_url = `${protocol}://${host}`;
+
     const { name, email } = req.body;
 
     if (!email || !name) {
@@ -43,7 +47,7 @@ export async function signup(req: Request, res: Response) {
         });
 
         // Send the magic link email
-        const verifyUrl = `${BASE_URL}/auth/verify?token=${token}&email=${email}`;
+        const verifyUrl = `${BASE_URL}/auth/verify?token=${token}&email=${email}&redirect_url=${client_url}`;
         await resend.emails.send({
             from: "dev@peppe.uk",
             to: email,

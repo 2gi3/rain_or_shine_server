@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express";
 import { prisma } from "../../prisma.js";
-// import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -12,8 +12,8 @@ router.get("/", async (req: Request, res: Response) => {
         console.error("JWT_SECRET is missing from environment variables");
         return res.status(500).send("Server misconfiguration: missing JWT secret");
     }
-    const { token, email } = req.query;
-    console.log({ tokenABC: token })
+    const { token, email, client_url } = req.query;
+
     if (!token || !email) return res.status(400).send("Missing token or email");
     if (Array.isArray(email) || Array.isArray(token)) return res.status(400).send("Invalid query params");
 
@@ -26,7 +26,6 @@ router.get("/", async (req: Request, res: Response) => {
             },
         },
     });
-    console.log({ recordABC: record })
 
 
     if (!record || record.expires < new Date()) {
@@ -34,8 +33,7 @@ router.get("/", async (req: Request, res: Response) => {
     }
 
     // Update user
-    // const user = 
-    await prisma.user.update({
+    const user = await prisma.user.update({
         where: { email: email as string },
         data: { emailVerified: new Date() },
     });
@@ -51,12 +49,12 @@ router.get("/", async (req: Request, res: Response) => {
     });
 
     // Log user in
-    // const jwtToken = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
-    // res.cookie("token", jwtToken, { httpOnly: true, secure: true });
-    return res.redirect(`/auth/signin?email=${encodeURIComponent(email as string)}`);
+    const jwtToken = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
+    res.cookie("token", jwtToken, { httpOnly: true, secure: true });
+    // return res.redirect(`/auth/signin?email=${encodeURIComponent(email as string)}`);
 
 
-    // return res.redirect("/dashboard");
+    return res.redirect(`${client_url}`);
 });
 
 export default router;
