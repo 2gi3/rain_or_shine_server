@@ -50,7 +50,7 @@ router.get("/", async (req: Request, res: Response) => {
 
     // Log user in
     const jwtToken = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
-    res.cookie("token", jwtToken, { httpOnly: true, secure: true });
+    res.cookie("token", jwtToken, { httpOnly: true, secure: true, sameSite: 'none' });
     // return res.redirect(`/auth/signin?email=${encodeURIComponent(email as string)}`);
 
 
