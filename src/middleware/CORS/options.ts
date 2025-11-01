@@ -1,9 +1,7 @@
 import type { CorsOptions } from "cors";
 
 const allowedOrigins = process.env.CORS_ORIGINS?.split(",") || [];
-
 const localhostRegex = /^http:\/\/localhost:\d+$/;
-
 
 const corsOptions: CorsOptions = {
     origin: (origin, callback) => {
@@ -16,7 +14,13 @@ const corsOptions: CorsOptions = {
         }
     },
     credentials: true,
-    allowedHeaders: ['Content-Type', 'x-csrf-token'],
-    exposedHeaders: ['x-csrf-token'],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "X-CSRF-Token",
+    ],
+    exposedHeaders: ["X-CSRF-Token"],
 };
+
 export default corsOptions;
