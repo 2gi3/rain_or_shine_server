@@ -1,15 +1,16 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { ENV } from "../../env.js";
 import Resend from "@auth/core/providers/resend";
 import type { ExpressAuthConfig } from "@auth/express";
 import { prisma } from "../../prisma.js";
 
-const authSecret = process.env.AUTH_SECRET;
-if (!authSecret) throw new Error("AUTH_SECRET environment variable is required");
+const authSecret = ENV.AUTH_SECRET;
+const authResendKey = ENV.AUTH_RESEND_KEY
 
 export const authConfig: ExpressAuthConfig = {
     providers: [
         Resend({
-            apiKey: process.env.AUTH_RESEND_KEY!,
+            apiKey: authResendKey,
             from: "dev@peppe.uk",
         }),
     ],

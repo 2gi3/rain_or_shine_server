@@ -5,9 +5,6 @@ import verifyRoute from "./verify.js";
 
 const router = express.Router();
 
-const authSecret = process.env.AUTH_SECRET;
-if (!authSecret) throw new Error("AUTH_SECRET environment variable is required");
-
 router.use("/verify", verifyRoute);
 
 // Initialize ExpressAuth 

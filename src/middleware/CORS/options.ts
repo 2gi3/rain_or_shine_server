@@ -1,6 +1,9 @@
 import type { CorsOptions } from "cors";
+import { ENV } from "../../env.js";
 
-const allowedOrigins = process.env.CORS_ORIGINS?.split(",") || [];
+
+// const allowedOrigins = ENV.CORS_ORIGINS?.split(",") || [];
+const allowedOrigins = ENV.CORS_ORIGINS;
 const localhostRegex = /^http:\/\/localhost:\d+$/;
 
 const corsOptions: CorsOptions = {

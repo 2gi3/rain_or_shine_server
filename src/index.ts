@@ -1,7 +1,8 @@
 import app from "./app.js";
+import { ENV } from "./env.js";
 import { hello } from "./hello.js";
 
-const PORT = process.env.PORT || 3000;
+const PORT = ENV.PORT;
 
 app.listen(PORT, () => {
     hello();

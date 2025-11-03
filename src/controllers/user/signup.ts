@@ -1,13 +1,11 @@
 import type { Request, Response } from "express";
+import { ENV } from "../../env.js";
 import { prisma } from "../../prisma.js";
 import { Resend } from "resend";
 import crypto from "crypto";
 
-const resend = new Resend(process.env.AUTH_RESEND_KEY!);
-if (!process.env.BASE_URL) {
-    throw new Error("BASE_URL environment variable is missing.");
-}
-const BASE_URL = process.env.BASE_URL;
+const resend = new Resend(ENV.AUTH_RESEND_KEY!);
+const BASE_URL = ENV.BASE_URL;
 
 export async function signup(req: Request, res: Response) {
 
