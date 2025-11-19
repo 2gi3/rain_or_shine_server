@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 
 import cors from "cors";
 import corsOptions from "./middleware/CORS/options.js";
-// import { signup } from "./controllers/user/signup.js"
+import shiftRoutes from "./routes/user/worker.js";
 
 
 
@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/users', userRoutes);
 // app.post("/auth/signup", signup);
 app.use("/auth", authRoutes);
-
+app.use("/worker", shiftRoutes)
 app.get("/", (_req: Request, res: Response) => {
     res.send("Fudge!");
 });

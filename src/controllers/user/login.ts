@@ -15,8 +15,12 @@ export async function login(req: Request, res: Response) {
 
     try {
         // 1️⃣ Check if user exists
-        const user = await prisma.user.findUnique({ where: { email } });
-
+        const user = await prisma.user.findUnique({
+            where: { email },
+            include: {
+                shifts: true,
+            }
+        });
         if (!user) {
             return res.status(404).json({ error: "User not found. Please sign up first." });
         }
@@ -57,11 +61,7 @@ export async function login(req: Request, res: Response) {
         return res.status(200).json({
             message: "Login successful",
             token,
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-            },
+            user
         });
     } catch (error) {
         console.error("Login error:", error);

@@ -24,6 +24,8 @@ model User {
   emailVerified DateTime?
   role          Role     @default(CUSTOMER)
   image         String?
+  shifts        Shift[] 
+  hourlyWage    Decimal?
   accounts      Account[]
   sessions      Session[]
   createdAt     DateTime @default(now())
@@ -59,4 +61,18 @@ model VerificationToken {
   token      String
   expires    DateTime
   @@id([identifier, token])
+}
+
+model Shift {
+  id             String   @id @default(cuid())
+  userId         String
+  startUtc       DateTime
+  endUtc         DateTime
+  timezone       String
+  breakMinutes   Int      @default(0)
+  notes          String?
+  durationMinutes Int
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

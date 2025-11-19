@@ -1,0 +1,6 @@
+- when prisma.schema is modified the following 2 commands need to run:
+  - npx prisma migrate dev -n some_migration_name
+  - npx prisma generate
+
+- Open database from terminal
+  - psql postgres
