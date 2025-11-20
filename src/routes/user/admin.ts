@@ -6,6 +6,6 @@ const router = Router();
 
 router.post("/shift", auth, createShift);
 
-router.get("/shifts", auth, getShiftsForUser);
+router.get("shifts/:userId", auth, getShiftsForUser);
 
 export default router;
