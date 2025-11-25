@@ -129,3 +129,70 @@ export const getShiftsForUser = async (req: AuthenticatedRequest, res: Response)
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+
+export const updateShift = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const authenticatedUserId = req.user?.userId;
+        const { shiftId } = req.params;
+
+        if (!authenticatedUserId) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
+        if (!shiftId) {
+            return res.status(400).json({ error: "Missing shiftId parameter" });
+        }
+
+        const existingShift = await prisma.shift.findUnique({
+            where: { id: shiftId }
+        });
+
+        if (!existingShift) {
+            return res.status(404).json({ error: "Shift not found" });
+        }
+
+        const isAdmin = authenticatedUserId === ADMIN_ID;
+        const isOwner = existingShift.userId === authenticatedUserId;
+
+        if (!isAdmin && !isOwner) {
+            return res.status(403).json({ error: "Forbidden: cannot modify another user's shift" });
+        }
+
+        const {
+            startLocal,
+            endLocal,
+            timezone,
+            breakMinutes,
+            notes
+        } = req.body;
+
+        const updatePayload: any = {};
+
+        if (startLocal) updatePayload.startUtc = new Date(startLocal);
+        if (endLocal) updatePayload.endUtc = new Date(endLocal);
+        if (timezone) updatePayload.timezone = timezone;
+        if (notes !== undefined) updatePayload.notes = notes;
+        if (breakMinutes !== undefined) updatePayload.breakMinutes = Number(breakMinutes) || 0;
+
+        const newStart = updatePayload.startUtc ?? existingShift.startUtc;
+        const newEnd = updatePayload.endUtc ?? existingShift.endUtc;
+        const newBreak =
+            updatePayload.breakMinutes !== undefined
+                ? updatePayload.breakMinutes
+                : existingShift.breakMinutes;
+
+        const totalMinutes = (newEnd.getTime() - newStart.getTime()) / 60000;
+        updatePayload.durationMinutes = Math.max(0, totalMinutes - newBreak);
+
+        const updatedShift = await prisma.shift.update({
+            where: { id: shiftId }, // now guaranteed string
+            data: updatePayload
+        });
+
+        return res.status(200).json(updatedShift);
+
+    } catch (err) {
+        console.error("Error updating shift:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
