@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { auth } from "../../middleware/auth/auth.js";
 import { createShift, getAllWorkers, getShiftsForUser, updateShift } from "../../controllers/user/worker.js";
-import { updateUser } from "@/controllers/user/index.js";
+import { updateUser } from "../../controllers/user/index.js";
 
 const router = Router();
 

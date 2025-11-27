@@ -1,4 +1,4 @@
-import type { AuthenticatedRequest } from "@/middleware/auth/auth.js";
+import type { AuthenticatedRequest } from "../../middleware/auth/auth.js";
 import { prisma } from "../../prisma.js";
 import type { Request, Response } from 'express';
 import { Role } from '@prisma/client';
