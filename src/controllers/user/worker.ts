@@ -1,6 +1,7 @@
 import type { Response } from 'express';
 import { prisma } from "../../prisma.js";
 import type { AuthenticatedRequest } from '../../middleware/auth/auth.js';
+import { Role } from '@prisma/client';
 
 
 
@@ -196,3 +197,79 @@ export const updateShift = async (req: AuthenticatedRequest, res: Response) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+
+export async function getAllWorkers(req: AuthenticatedRequest, res: Response) {
+    try {
+        if (!req.user?.userId) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
+        // Fetch the requesting user's role
+        const currentUser = await prisma.user.findUnique({
+            where: { id: req.user.userId },
+            select: { role: true },
+        });
+
+        if (!currentUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Only OWNER or MANAGER can access
+        if (currentUser.role !== Role.OWNER && currentUser.role !== Role.MANAGER) {
+            return res.status(403).json({ error: "Forbidden: insufficient permissions" });
+        }
+
+        // Optional month/year filter
+        const { month, year } = req.query;
+        let startOfMonth: Date | null = null;
+        let endOfMonth: Date | null = null;
+
+        if (month && year) {
+            const monthNum = parseInt(month as string, 10);
+            const yearNum = parseInt(year as string, 10);
+
+            if (!isNaN(monthNum) && !isNaN(yearNum) && monthNum >= 1 && monthNum <= 12) {
+                startOfMonth = new Date(yearNum, monthNum - 1, 1);
+                endOfMonth = new Date(yearNum, monthNum, 0, 23, 59, 59, 999);
+            }
+        }
+
+        // Fetch users with allowed roles
+        const users = await prisma.user.findMany({
+            where: {
+                role: { in: [Role.EMPLOYEE, Role.MANAGER, Role.OWNER] },
+            },
+            select: {
+                id: true,
+                name: true,
+                // @ts-ignore
+                hourlyWage: true,
+                role: true,
+            },
+        });
+
+        // For each user, calculate total minutes worked in the month
+        const results = await Promise.all(users.map(async (user) => {
+            const where: any = { userId: user.id };
+            if (startOfMonth && endOfMonth) {
+                where.startUtc = { gte: startOfMonth, lte: endOfMonth };
+            }
+
+            const total = await prisma.shift.aggregate({
+                _sum: { durationMinutes: true },
+                where,
+            });
+
+            return {
+                ...user,
+                totalMinutesWorked: total._sum.durationMinutes ?? 0,
+            };
+        }));
+
+        return res.status(200).json(results);
+
+    } catch (error) {
+        console.error("Error fetching workers:", error);
+        return res.status(500).json({ error: "Failed to fetch workers" });
+    }
+}

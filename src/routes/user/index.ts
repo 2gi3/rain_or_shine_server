@@ -1,5 +1,5 @@
 import { signup } from '../../controllers/user/signup.js';
-import { deleteUser, getAllUsers, updateProfile } from '../../controllers/user/index.js';
+import { deleteUser, updateProfile } from '../../controllers/user/index.js';
 import { login } from '../../controllers/user/login.js';
 import { auth } from '../../middleware/auth/auth.js';
 import express, { Router } from 'express';
@@ -16,7 +16,6 @@ router.get("/me", auth, (req, res) => {
 });
 router.put("/me", auth, updateProfile);
 
-router.get("/all", getAllUsers);
 router.delete("/delete/:id", deleteUser);
 
 

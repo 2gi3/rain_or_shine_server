@@ -5,6 +5,7 @@ import { Role } from '@prisma/client';
 
 
 
+
 export async function getAllUsers(_req: Request, res: Response) {
     try {
         const users = await prisma.user.findMany({});
