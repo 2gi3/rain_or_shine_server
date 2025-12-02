@@ -22,6 +22,7 @@ const corsOptions: CorsOptions = {
         "Content-Type",
         "Authorization",
         "X-CSRF-Token",
+        "Origin",
     ],
     exposedHeaders: ["X-CSRF-Token"],
 };

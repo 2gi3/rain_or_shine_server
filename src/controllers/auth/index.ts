@@ -22,12 +22,12 @@ export async function requestOtp(req: Request, res: Response) {
 
         // Generate OTP
         const otp = await generateOTP(email);
-
+        console.log({ 'one time password': otp })
         // Send OTP email
         await resend.emails.send({
             from: "dev@peppe.uk", // ✅ use the same sender as signup
             to: email,
-            subject: "Your Rain or Shine verification code",
+            subject: "Thank you for trying my app, this is the verification code",
             html: `
         <p>Hi ${user.name || "there"},</p>
         <p>Your verification code is:</p>

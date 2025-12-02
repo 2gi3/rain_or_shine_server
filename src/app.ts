@@ -11,6 +11,11 @@ import adminRoutes from "./routes/user/admin.js";
 
 
 const app = express();
+app.use((req, _res, next) => {
+    const origin = req.get("origin") || "none";
+    console.log(`[REQ] ${req.method} ${req.originalUrl} — origin:${origin}`);
+    next();
+});
 app.set("trust proxy", 1);
 app.use(cookieParser());
 app.use(cors(corsOptions));

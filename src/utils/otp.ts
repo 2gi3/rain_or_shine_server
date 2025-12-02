@@ -6,7 +6,7 @@ import type { Email, OTP } from "../types/common.js";
  * Generate and store a new OTP for an email
  */
 export async function generateOTP(email: any, expiryMinutes = 15) {
-    const otp = crypto.randomInt(100000, 999999).toString(); // 6-digit
+    const otp = crypto.randomInt(100000, 999999).toString();
     const expires = new Date(Date.now() + expiryMinutes * 60 * 1000);
 
     // Remove any previous OTPs for that email
