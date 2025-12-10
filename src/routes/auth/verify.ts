@@ -21,7 +21,6 @@ router.get("/", async (req: Request, res: Response) => {
             return res.status(400).send("Invalid query params");
         }
 
-        // ✅ Find matching verification token
         const record = await prisma.verificationToken.findUnique({
             where: {
                 identifier_token: {
@@ -31,18 +30,15 @@ router.get("/", async (req: Request, res: Response) => {
             },
         });
 
-        // ✅ Check if token exists or expired
         if (!record || record.expires < new Date()) {
             return res.status(400).send("Invalid or expired verification token.");
         }
 
-        // ✅ Mark user as verified
         const user = await prisma.user.update({
             where: { email: email as string },
             data: { emailVerified: new Date() },
         });
 
-        // ✅ Delete used verification token
         await prisma.verificationToken.delete({
             where: {
                 identifier_token: {
@@ -52,14 +48,12 @@ router.get("/", async (req: Request, res: Response) => {
             },
         });
 
-        // ✅ Generate JWT for automatic login
         const jwtToken = jwt.sign(
             { userId: user.id, email: user.email },
             JWT_SECRET,
             { expiresIn: "7d" }
         );
 
-        // ✅ Redirect user to your client (frontend) with the token
         const redirectUrl = `${CLIENT_URL}?token=${jwtToken}`;
         return res.redirect(302, redirectUrl);
     } catch (error) {

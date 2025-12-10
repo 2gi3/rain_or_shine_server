@@ -28,15 +28,12 @@ export const createShift = async (req: AuthenticatedRequest, res: Response) => {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
-        // Default: user creates shift for themselves
         let targetUserId = authenticatedUserId;
 
-        // If admin and body contains a userId → allow override
         if (authenticatedUserId === ADMIN_ID && requestedUserId) {
             targetUserId = requestedUserId;
         }
 
-        // Convert time
         const startUtc = new Date(startLocal);
         const endUtc = new Date(endLocal);
 
@@ -204,7 +201,6 @@ export async function getAllWorkers(req: AuthenticatedRequest, res: Response) {
             return res.status(401).json({ error: "Unauthorized" });
         }
 
-        // Fetch the requesting user's role
         const currentUser = await prisma.user.findUnique({
             where: { id: req.user.userId },
             select: { role: true },
@@ -214,12 +210,10 @@ export async function getAllWorkers(req: AuthenticatedRequest, res: Response) {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Only OWNER or MANAGER can access
         if (currentUser.role !== Role.OWNER && currentUser.role !== Role.MANAGER) {
             return res.status(403).json({ error: "Forbidden: insufficient permissions" });
         }
 
-        // Optional month/year filter
         const { month, year } = req.query;
         let startOfMonth: Date | null = null;
         let endOfMonth: Date | null = null;
@@ -234,7 +228,6 @@ export async function getAllWorkers(req: AuthenticatedRequest, res: Response) {
             }
         }
 
-        // Fetch users with allowed roles
         const users = await prisma.user.findMany({
             where: {
                 role: { in: [Role.EMPLOYEE, Role.MANAGER, Role.OWNER] },
@@ -248,7 +241,6 @@ export async function getAllWorkers(req: AuthenticatedRequest, res: Response) {
             },
         });
 
-        // For each user, calculate total minutes worked in the month
         const results = await Promise.all(users.map(async (user) => {
             const where: any = { userId: user.id };
             if (startOfMonth && endOfMonth) {

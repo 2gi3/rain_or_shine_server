@@ -1,4 +1,3 @@
-// src/middleware/verifyOtp.ts
 import type { Request, Response, NextFunction } from "express";
 import { verifyOTP } from "../../utils/otp.js";
 import type { OtpRequestBody } from "../../types/user/index.js";

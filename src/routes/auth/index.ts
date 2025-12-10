@@ -7,10 +7,8 @@ const router = express.Router();
 
 router.use("/verify", verifyRoute);
 
-// Initialize ExpressAuth 
 router.use("/", ExpressAuth(authConfig));
 
-// CSRF route
 router.get("/csrf", (req, res) => {
     if (!req.csrfToken) return res.status(500).json({ error: "CSRF not configured properly" });
     return res.json({ csrfToken: req.csrfToken() });

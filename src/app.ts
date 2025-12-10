@@ -23,7 +23,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/users', userRoutes);
-// app.post("/auth/signup", signup);
 app.use("/auth", authRoutes);
 app.use("/worker", shiftRoutes)
 app.use("/admin", adminRoutes)

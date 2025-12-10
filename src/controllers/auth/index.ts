@@ -14,18 +14,16 @@ export async function requestOtp(req: Request, res: Response) {
     }
 
     try {
-        // Check if user exists
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) {
             return res.status(404).json({ error: "User not found. Please sign up first." });
         }
 
-        // Generate OTP
         const otp = await generateOTP(email);
         console.log({ 'one time password': otp })
-        // Send OTP email
+
         await resend.emails.send({
-            from: "dev@peppe.uk", // ✅ use the same sender as signup
+            from: "dev@peppe.uk",
             to: email,
             subject: "Thank you for trying my app, this is the verification code",
             html: `

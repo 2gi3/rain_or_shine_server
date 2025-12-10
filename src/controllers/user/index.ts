@@ -28,7 +28,6 @@ function buildUpdateData(body: any, isAdmin: boolean) {
         if (role !== undefined) data.role = role;
         if (image !== undefined) data.image = image;
     } else {
-        // Regular users cannot update role or hourlyWage
         if (name !== undefined) data.name = name;
         if (email !== undefined) data.email = email;
         if (image !== undefined) data.image = image;
@@ -37,7 +36,6 @@ function buildUpdateData(body: any, isAdmin: boolean) {
     return data;
 }
 
-// Admin updates any user by ID
 export async function updateUser(req: AuthenticatedRequest, res: Response) {
     const { id } = req.params;
     if (!id) return res.status(400).json({ error: "User ID is required" });
@@ -65,7 +63,6 @@ export async function updateUser(req: AuthenticatedRequest, res: Response) {
     }
 }
 
-// Regular user updates their own profile
 export async function updateProfile(req: AuthenticatedRequest, res: Response) {
     const userId = req.user?.userId;
     if (!userId) return res.status(403).json({ error: "Unauthorized" });
