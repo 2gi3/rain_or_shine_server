@@ -7,3 +7,9 @@
   - \l (list databases)
   - \c (connect to a specific database)
   - \dt (show tables)
+
+- Example ```
+UPDATE "User"
+SET name = 'New Name'
+WHERE email = 'user@example.com';
+``` 
