@@ -4,3 +4,6 @@
 
 - Open database from terminal
   - psql postgres
+  - \l (list databases)
+  - \c (connect to a specific database)
+  - \dt (show tables)

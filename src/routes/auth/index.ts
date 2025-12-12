@@ -1,11 +1,12 @@
 import express from "express";
 import { ExpressAuth } from "@auth/express";
 import { authConfig } from "../../middleware/auth/config.js";
-import verifyRoute from "./verify.js";
+// import verifyRoute from "./verify.js";
+import { verifyEmail } from "@/controllers/auth/index.js";
 
 const router = express.Router();
 
-router.use("/verify", verifyRoute);
+router.use("/verify", verifyEmail);
 
 router.use("/", ExpressAuth(authConfig));
 

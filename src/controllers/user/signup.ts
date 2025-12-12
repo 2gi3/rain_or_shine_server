@@ -39,6 +39,8 @@ export async function signup(req: Request, res: Response) {
       `,
         });
 
+        console.log({ otp })
+
         return res.status(200).json({
             message: "Verification code sent to email.",
             user,
