@@ -18,6 +18,14 @@ app.use((req, _res, next) => {
 });
 app.set("trust proxy", 1);
 app.use(cookieParser());
+
+// test
+app.use((req, _res, next) => {
+    console.log("[COOKIE CHECK] token:", req.cookies?.token || "none");
+    next();
+});
+
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
